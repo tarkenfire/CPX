@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -40,7 +41,7 @@ public class LoginActivity extends Activity
 			{
 				if (user != null)
 				{
-					
+					onSignInSuccess();
 				}
 				else
 				{
@@ -50,6 +51,12 @@ public class LoginActivity extends Activity
 			}
 		}
 		);
+	}
+	
+	public void onSignInSuccess()
+	{
+		Intent sender = new Intent(this, MainMenuActivity.class);
+		startActivity(sender);
 	}
 	
 	public void sendAlert(String title, String message)

@@ -2,7 +2,14 @@
 <resources>
 
     <string name="app_name">CPXProject</string>
+    
+    
     <string name="action_settings">Settings</string>
+    <string name="action_logout">Log Out</string>
+    
+    
     <string name="hello_world">Hello world!</string>
+    
+    
 
 </resources>

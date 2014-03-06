@@ -25,6 +25,10 @@ public class LoginMenuActivity extends Activity
 		if (user != null)
 		{
 			Log.i("User", "Not Null");
+			Intent sender;
+			sender = new Intent(this, MainMenuActivity.class);
+			startActivity(sender);
+			
 		}
 		//else do nothing
 	}
