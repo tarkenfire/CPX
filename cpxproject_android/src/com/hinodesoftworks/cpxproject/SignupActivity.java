@@ -8,6 +8,7 @@ import com.parse.SignUpCallback;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -61,6 +62,7 @@ public class SignupActivity extends Activity
 					if (e == null)
 					{
 						Log.i("Signup", "SUCCESS");
+						onSignUpSuccess();
 						
 					}
 					else
@@ -80,6 +82,12 @@ public class SignupActivity extends Activity
 		}
 	}
 	
+	//convience method for calling main thread functions from async function
+	public void onSignUpSuccess()
+	{
+		Intent sender = new Intent(this, MainMenuActivity.class);
+		startActivity(sender);
+	}
 	
 	public boolean isEmpty(EditText et)
 	{

@@ -36,6 +36,10 @@
             android:name="com.hinodesoftworks.cpxproject.SignupActivity">
         </activity>
         
+        <activity 
+            android:name="com.hinodesoftworks.cpxproject.MainMenuActivity">
+        </activity>
+        
     </application>
 
 </manifest>

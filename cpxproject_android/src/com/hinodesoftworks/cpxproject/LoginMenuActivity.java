@@ -6,6 +6,7 @@ import com.parse.ParseUser;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 public class LoginMenuActivity extends Activity
@@ -23,7 +24,7 @@ public class LoginMenuActivity extends Activity
 		//check if user is already logged in
 		if (user != null)
 		{
-			
+			Log.i("User", "Not Null");
 		}
 		//else do nothing
 	}
@@ -45,6 +46,8 @@ public class LoginMenuActivity extends Activity
 			break;
 			
 		case R.id.login_anon_user:
+			sender = new Intent(this, MainMenuActivity.class);
+			startActivity(sender);
 			break;
 		}
 	}
