@@ -5,17 +5,23 @@ import java.util.List;
 
 import com.parse.FindCallback;
 import com.parse.Parse;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainMenuActivity extends Activity
 {
@@ -36,14 +42,73 @@ public class MainMenuActivity extends Activity
 		userDataList = (ListView) findViewById(R.id.main_private_data_list);
 		
 		Parse.initialize(this, "Mfuibt410lvJAj0eesG0cTdYRRk6LkW9bWoQYvdZ", "NtfbH5hXcVCp1t1GBgK3FxUQpP2rtVLaKsa9FQB2");
-		
+				
 		getPublicData();
+
+		//check if anon flag is set, if so, no user data exists.
 		
+		Intent sender = getIntent();
+		boolean anonFlag = sender.getBooleanExtra("flag_anon", false);
 		
-		getUserData();
+		if (anonFlag == false)
+		{
+			getUserData();
+		}
+	}
+
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		Intent sender = getIntent();
+		boolean anonFlag = sender.getBooleanExtra("flag_anon", false);
+		
+		//hack fix to prevent anon users from getting private data.
+		if (anonFlag == true)
+		{
+			ParseUser.logOut();
+		}
+		
+	}
+
+
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		
+		return super.onCreateOptionsMenu(menu);
 	}
 	
-	
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		if (item.getItemId() == R.id.action_log_out)
+		{	
+			//log out user
+			ParseUser.logOut();
+			
+			//finally, return to login screen.
+			Intent returnIntent = new Intent(this, LoginMenuActivity.class);
+			returnIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			returnIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			
+			startActivity(returnIntent);
+			
+			//inform user of logout
+			Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();
+			
+			return true;
+		}
+		else
+		{
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
 	public void getPublicData()
 	{
 		ParseQuery<ParseObject> pubObj = ParseQuery.getQuery("PublicData");
@@ -127,13 +192,23 @@ public class MainMenuActivity extends Activity
 	
 	public void createUserData()
 	{
+		
+		//dummy data
+		String[] items = 
+			{
+				"Glob of Ectoplasm [Exotic Crafting Material] - 37s, 64c", 
+				"Superior Rune of Melandru [Exotic Rune] - 4g, 78s",
+				"Black Quaggan Tonic [Common Consumable] - 27c"
+			};
+		
 		ParseUser user = ParseUser.getCurrentUser();
 		String username = user.getUsername();
 		
 		for (int i = 0; i < 3; i++)
 		{
 			ParseObject dummy = new ParseObject(username + DATA_SUFFIX);
-			dummy.put("data", "User: " + username + " Private data " + i);
+			dummy.put("data", items[i]);
+			dummy.setACL(new ParseACL(user));
 			dummy.saveInBackground();
 		}
 

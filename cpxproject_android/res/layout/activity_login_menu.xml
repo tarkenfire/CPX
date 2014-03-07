@@ -14,7 +14,7 @@
 	    android:id="@+id/login_new_user_btn"
 	    android:layout_width="match_parent"
 	    android:layout_height="0dp"
-	    android:text="PLACEHOLDER"
+	    android:text="@string/new_user"
 	    android:layout_weight="45"
 	    android:onClick="onClick"
 	     />
@@ -23,7 +23,7 @@
 	    android:id="@+id/login_existing_user"
 	    android:layout_width="match_parent"
 	    android:layout_height="0dp"
-	    android:text="PLACEHOLDER"
+	    android:text="@string/old_user"
 	    android:layout_weight="45"
 	    android:onClick="onClick"
 	     />
@@ -32,7 +32,7 @@
 	    android:id="@+id/login_anon_user"
 	    android:layout_width="match_parent"
 	    android:layout_height="0dp"
-	    android:text="PLACEHOLDER"
+	    android:text="@string/anon"
 	    android:layout_weight="10"
 	    android:onClick="onClick"
 	     />

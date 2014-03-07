@@ -12,18 +12,19 @@
     <TextView 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Username"
+        android:text="@string/username"
         />
     <EditText
         android:id="@+id/sign_in_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="text"
          />
     
     <TextView 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Password"
+        android:text="@string/password"
         />
     <EditText 
         android:id="@+id/sign_in_password"
@@ -36,7 +37,7 @@
         android:id="@+id/sign_in_submit" 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="@string/login"
         android:onClick="onClick"
         />
 

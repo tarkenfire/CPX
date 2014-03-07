@@ -7,18 +7,19 @@
     <TextView 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Username"
+        android:text="@string/username"
         />
     <EditText
         android:id="@+id/signup_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="text"
          />
     
     <TextView 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Password"
+        android:text="@string/password"
         />
     <EditText 
         android:id="@+id/signup_password"
@@ -30,7 +31,7 @@
     <TextView 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Confirm Password"
+        android:text="@string/conf_password"
         />
     <EditText 
         android:id="@+id/signup_password_confirm"
@@ -43,7 +44,7 @@
         android:id="@+id/signup_submit" 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create New User"
+        android:text="@string/create_user"
         android:onClick="onClick"
         />
     

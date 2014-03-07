@@ -9,7 +9,17 @@
     
     
     <string name="hello_world">Hello world!</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="conf_password">Confirm Password</string>
+    <string name="create_user">Create New User</string>
+    <string name="login">Login</string>
     
+    <string name="public_label">Top Priced Items</string>
+    <string name="private_label">Personal Item Wish List</string>
     
+    <string name="new_user">New User - Create Account</string>
+    <string name="old_user">Existing User - Log In</string>
+    <string name="anon">Skip Log In - Anon Log In</string>
 
 </resources>

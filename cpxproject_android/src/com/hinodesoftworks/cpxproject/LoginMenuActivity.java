@@ -1,6 +1,9 @@
 package com.hinodesoftworks.cpxproject;
 
+import com.parse.LogInCallback;
 import com.parse.Parse;
+import com.parse.ParseAnonymousUtils;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import android.app.Activity;
@@ -50,9 +53,37 @@ public class LoginMenuActivity extends Activity
 			break;
 			
 		case R.id.login_anon_user:
-			sender = new Intent(this, MainMenuActivity.class);
-			startActivity(sender);
+			
+			ParseAnonymousUtils.logIn(new LogInCallback() 
+				{
+					@Override
+					public void done(ParseUser user, ParseException e) 
+					{
+						if (e == null) 
+						{
+							//login success	
+							onAnonLogin();
+						} 
+						else 
+						{
+							//login failure
+							e.printStackTrace();
+						}
+					}
+				});
+			
+			
+
 			break;
 		}
+	}
+	
+	
+	private void onAnonLogin()
+	{
+		Intent sender;
+		sender = new Intent(this, MainMenuActivity.class);
+		sender.putExtra("flag_anon", true);
+		startActivity(sender);
 	}
 }
