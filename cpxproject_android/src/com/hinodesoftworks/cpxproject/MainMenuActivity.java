@@ -5,7 +5,6 @@ import java.util.List;
 import com.hinodesoftworks.cpxproject.utils.ParseArrayAdapter;
 import com.parse.FindCallback;
 import com.parse.Parse;
-import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -22,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,6 +33,9 @@ public class MainMenuActivity extends Activity
 	
 	ListView pubDataList;
 	ListView userDataList;
+	
+	Button publicButton;
+	Button privateButton;
 	
 	//this is crude, but it works.
 	EditMode currentMode = EditMode.MODE_PUBLIC;
@@ -49,6 +52,9 @@ public class MainMenuActivity extends Activity
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		publicButton = (Button) findViewById(R.id.button_add_public);
+		privateButton = (Button) findViewById(R.id.button_add_private);
 		
 		pubDataList = (ListView)findViewById(R.id.main_public_data_list);
 		userDataList = (ListView) findViewById(R.id.main_private_data_list);
@@ -102,9 +108,31 @@ public class MainMenuActivity extends Activity
 		if (anonFlag == false)
 		{
 			getUserData();
+			
+			publicButton.setEnabled(true);
+			privateButton.setEnabled(true);
+		}
+		else
+		{
+			//restrict anon users to view only access
+			publicButton.setEnabled(false);
+			privateButton.setEnabled(false);
 		}
 	}
 
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		getPublicData();
+		
+		if (anonFlag == false)
+		{
+			getUserData();
+		}
+		
+	}
+	
 	@Override
 	protected void onStop()
 	{
@@ -253,7 +281,30 @@ public class MainMenuActivity extends Activity
 	
 	protected void onItemEdit()
 	{
+		ParseArrayAdapter adapter = null; 
 		
+		switch (currentMode)
+		{
+			case MODE_PRIVATE:
+				adapter = (ParseArrayAdapter) userDataList.getAdapter();
+				break;
+			case MODE_PUBLIC:
+				adapter = (ParseArrayAdapter) pubDataList.getAdapter();
+				break;
+		}
+		
+		//get item id and send intent with two flags.
+		if (adapter != null)
+		{
+			ParseObject itemToEdit = adapter.getItem(selectedIndex);
+			String editID = itemToEdit.getObjectId();
+			
+			Intent sendingIntent = new Intent(this, AddItemActivity.class);
+			sendingIntent.putExtra("editID", editID);
+			sendingIntent.putExtra("flag_edit_mode", true);
+			
+			startActivity(sendingIntent);
+		}
 	}
 	
 	public void onClick(View v)
@@ -278,6 +329,13 @@ public class MainMenuActivity extends Activity
 		@Override
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item)
 		{
+			if (MainMenuActivity.this.anonFlag == true)
+			{
+				Toast.makeText(MainMenuActivity.this, "Only registered users can edit data.", Toast.LENGTH_SHORT).show();
+				mode.finish();
+				return false;
+			}
+	
 			switch(item.getItemId())
 			{
 				case R.id.action_delete:
@@ -285,6 +343,7 @@ public class MainMenuActivity extends Activity
 					break;
 					
 				case R.id.action_edit:
+					onItemEdit();
 					break;
 			}
 	

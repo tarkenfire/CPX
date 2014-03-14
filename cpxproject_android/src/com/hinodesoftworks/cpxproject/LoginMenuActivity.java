@@ -7,10 +7,14 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 public class LoginMenuActivity extends Activity
 {
@@ -23,6 +27,17 @@ public class LoginMenuActivity extends Activity
 		Parse.initialize(this, "Mfuibt410lvJAj0eesG0cTdYRRk6LkW9bWoQYvdZ", "NtfbH5hXcVCp1t1GBgK3FxUQpP2rtVLaKsa9FQB2");
 		
 		ParseUser user = ParseUser.getCurrentUser();
+		
+		ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+		 
+		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+		boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+		
+		if (!isConnected)
+		{
+			Toast.makeText(this, "No Internet Connection - Please try again later.", Toast.LENGTH_LONG).show();
+			return;
+		}
 		
 		//check if user is already logged in
 		if (user != null)
@@ -39,6 +54,17 @@ public class LoginMenuActivity extends Activity
 	public void onClick(View v)
 	{
 		Intent sender;
+		
+		ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+		 
+		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+		boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+		
+		if (!isConnected)
+		{
+			Toast.makeText(this, "No Internet Connection - Please try again later.", Toast.LENGTH_LONG).show();
+			return;
+		}
 		
 		switch (v.getId())
 		{
