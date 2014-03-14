@@ -16,9 +16,11 @@
 	        /> 
 	        
 	    <Button 
+	        android:id="@+id/button_add_public"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="Add New Item"
+	        android:onClick="onClick"
 	        />
 	        
    	</LinearLayout>
@@ -41,9 +43,11 @@
 	        />
 	    
 	   	<Button 
+	   	    android:id="@+id/button_add_private"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="Add New Item"
+	        android:onClick="onClick"
 	        />
 	        
     </LinearLayout>

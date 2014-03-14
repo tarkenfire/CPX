@@ -47,7 +47,23 @@ public class ParseArrayAdapter extends ArrayAdapter<ParseObject>
 		ParseObject curItem = getItem(position);
 		
 		TextView textView = (TextView)convertView.findViewById(R.id.list_item_text);
-		textView.setText(curItem.getString("data"));
+		
+		//builders are more efficient than concatenation
+		StringBuilder builder = new StringBuilder();
+		builder.append(curItem.getString("name"));
+		builder.append(" [");
+		builder.append(curItem.getString("rarity"));
+		builder.append(" ");
+		builder.append(curItem.getString("type"));
+		builder.append(" - ");
+		builder.append(curItem.getString("gold"));
+		builder.append("g, ");
+		builder.append(curItem.getString("silver"));
+		builder.append("s, ");
+		builder.append(curItem.getString("copper"));
+		builder.append("c");
+		
+		textView.setText(builder.toString());
 		
 		
 		return convertView;

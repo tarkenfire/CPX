@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="rarity_array">
+        <item>Common</item>
+        <item>Uncommon</item>
+        <item>Masterwork</item>
+        <item>Rare</item>
+        <item>Exotic</item>
+        <item>Ascended</item>
+        <item>Legendary</item>
+    </string-array>
+    
+	<string-array name="type_array">
+        <item>Consumable</item>
+        <item>Crafting Material</item>
+        <item>Armor</item>
+        <item>Trinket</item>
+        <item>Sword</item>
+        <item>Hammer</item>
+        <item>Dagger</item>
+        <item>Greatsword</item>
+        <item>Scepter</item>
+        <item>Focus</item>
+        <item>Staff</item>
+        <item>Shield</item>
+        <item>Warhorn</item>
+        <item>Axe</item>
+        <item>Spear</item>
+        <item>Trident</item>
+        <item>Harpoon Gun</item>
+    </string-array>
+</resources>

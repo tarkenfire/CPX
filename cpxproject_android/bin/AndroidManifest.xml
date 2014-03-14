@@ -40,6 +40,10 @@
             android:name="com.hinodesoftworks.cpxproject.MainMenuActivity">
         </activity>
         
+        <activity 
+            android:name="com.hinodesoftworks.cpxproject.AddItemActivity">
+        </activity>
+        
     </application>
 
 </manifest>

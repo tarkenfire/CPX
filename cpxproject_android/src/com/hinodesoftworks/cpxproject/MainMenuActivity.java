@@ -179,6 +179,9 @@ public class MainMenuActivity extends Activity
 	
 	public void onPublicDataRetuned(List<ParseObject> data)
 	{	
+		
+		if (data.size() == 0) return;
+		
 		ParseArrayAdapter adapter = new ParseArrayAdapter(this, R.layout.list_gw_item, data);
 		
 		pubDataList.setAdapter(adapter);
@@ -212,60 +215,24 @@ public class MainMenuActivity extends Activity
 	
 	public void onUserDataReturned(List<ParseObject> data)
 	{
-		if (data.size() == 0)
-		{
-			//data not created, create data and try again.
-			createUserData();
-			return;
-		}
+		if (data.size() == 0) return;
 		
 		ParseArrayAdapter adapter = new ParseArrayAdapter(this, R.layout.list_gw_item, data);
 		
 		userDataList.setAdapter(adapter);
 	}
 	
-	public void createUserData()
-	{
-		
-		//dummy data
-		String[] items = 
-			{
-				"Glob of Ectoplasm [Exotic Crafting Material] - 37s, 64c", 
-				"Superior Rune of Melandru [Exotic Rune] - 4g, 78s",
-				"Black Quaggan Tonic [Common Consumable] - 27c"
-			};
-		
-		ParseUser user = ParseUser.getCurrentUser();
-		String username = user.getUsername();
-		
-		for (int i = 0; i < 3; i++)
-		{
-			ParseObject dummy = new ParseObject(username + DATA_SUFFIX);
-			dummy.put("data", items[i]);
-			dummy.setACL(new ParseACL(user));
-			dummy.saveInBackground();
-		}
-
-		Log.i("Data Creation", "Data Created");
-		
-		getUserData();
-	}
-	
 	protected void deleteItem()
 	{
 		ParseArrayAdapter adapter = null; 
-		boolean pubRefreshFlag = false;
-		boolean priRefreshFlag = false;
 		
 		switch (currentMode)
 		{
 			case MODE_PRIVATE:
 				adapter = (ParseArrayAdapter) userDataList.getAdapter();
-				priRefreshFlag = true;
 				break;
 			case MODE_PUBLIC:
 				adapter = (ParseArrayAdapter) pubDataList.getAdapter();
-				pubRefreshFlag = true;
 				break;
 		}
 		
@@ -276,11 +243,10 @@ public class MainMenuActivity extends Activity
 			itemToDelete.deleteInBackground();
 		}
 		
-		//refresh lists if needed.
-		if (pubRefreshFlag)
-			getPublicData();
+		//refresh lists.
+		getPublicData();
 		
-		if (priRefreshFlag)
+		if (!anonFlag)
 			getUserData();
 		
 	}
@@ -288,6 +254,23 @@ public class MainMenuActivity extends Activity
 	protected void onItemEdit()
 	{
 		
+	}
+	
+	public void onClick(View v)
+	{
+		Intent sender = new Intent(this, AddItemActivity.class);
+		
+		switch (v.getId())
+		{
+		case R.id.button_add_private:
+			sender.putExtra("flag_is_public", false);
+			break;
+		case R.id.button_add_public:
+			sender.putExtra("flag_is_public", true);
+			break;
+		}
+		
+		startActivity(sender);	
 	}
 	
 	class ItemActionBarCallback implements ActionMode.Callback
