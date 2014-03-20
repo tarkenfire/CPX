@@ -55,17 +55,6 @@ public class LoginMenuActivity extends Activity
 	{
 		Intent sender;
 		
-		ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-		 
-		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-		boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-		
-		if (!isConnected)
-		{
-			Toast.makeText(this, "No Internet Connection - Please try again later.", Toast.LENGTH_LONG).show();
-			return;
-		}
-		
 		switch (v.getId())
 		{
 		case R.id.login_new_user_btn:
@@ -77,39 +66,6 @@ public class LoginMenuActivity extends Activity
 			sender = new Intent(this, LoginActivity.class);
 			startActivity(sender);
 			break;
-			
-		case R.id.login_anon_user:
-			
-			ParseAnonymousUtils.logIn(new LogInCallback() 
-				{
-					@Override
-					public void done(ParseUser user, ParseException e) 
-					{
-						if (e == null) 
-						{
-							//login success	
-							onAnonLogin();
-						} 
-						else 
-						{
-							//login failure
-							e.printStackTrace();
-						}
-					}
-				});
-			
-			
-
-			break;
 		}
-	}
-	
-	
-	private void onAnonLogin()
-	{
-		Intent sender;
-		sender = new Intent(this, MainMenuActivity.class);
-		sender.putExtra("flag_anon", true);
-		startActivity(sender);
 	}
 }

@@ -36,16 +36,12 @@ public class AddItemActivity extends Activity
 		Parse.initialize(this, "Mfuibt410lvJAj0eesG0cTdYRRk6LkW9bWoQYvdZ", "NtfbH5hXcVCp1t1GBgK3FxUQpP2rtVLaKsa9FQB2");
 		
 		ActionBar actionBar = getActionBar();
-		isPublic = this.getIntent().getBooleanExtra("flag_is_public", true);
+		
 		boolean isEditMode = this.getIntent().getBooleanExtra("flag_edit_mode", false);
 		
 		if (isEditMode)
 		{
 			actionBar.setTitle("Add New Public Item");
-		}
-		else if (isPublic)
-		{
-			actionBar.setTitle("Edit Item");
 		}
 		else //is private
 		{
@@ -105,11 +101,12 @@ public class AddItemActivity extends Activity
 			return;
 		}
 		
-		//only works for public data
 		if(this.getIntent().getBooleanExtra("flag_edit_mode", false))
 		{
-			ParseQuery<ParseObject> query = ParseQuery.getQuery("PublicData");
+			ParseUser user = ParseUser.getCurrentUser();
 			
+			ParseQuery<ParseObject> query = ParseQuery.getQuery(user.getUsername() + MainMenuActivity.DATA_SUFFIX);
+
 			query.getInBackground(this.getIntent().getStringExtra("editID"), new GetCallback<ParseObject>() 
 					{
 					public void done(ParseObject itemInfo, ParseException e) 
@@ -137,40 +134,23 @@ public class AddItemActivity extends Activity
 			return;
 		}
 		
-		//gather remaining form data into parse object.
-		if (isPublic)
-		{
-			ParseObject publicObject = new ParseObject("PublicData");
-			publicObject.put("name", itemName.getText().toString().trim());
-			publicObject.put("rarity", itemType.getSelectedItem().toString());
-			publicObject.put("type", rarity.getSelectedItem().toString());
-			publicObject.put("gold", gold.getText().toString().trim());
-			publicObject.put("silver", silver.getText().toString().trim());
-			publicObject.put("copper", copper.getText().toString().trim());
-			
-			publicObject.saveInBackground();
-			Toast.makeText(this, "Item Added", Toast.LENGTH_SHORT).show();
-			this.finish();
-		}
-		else //private user add
-		{
-			ParseUser user = ParseUser.getCurrentUser();
-			ParseObject userObject = new ParseObject(user.getUsername() + MainMenuActivity.DATA_SUFFIX);
-			
-			userObject.put("name", itemName.getText().toString().trim());
-			userObject.put("rarity", itemType.getSelectedItem().toString());
-			userObject.put("type", rarity.getSelectedItem().toString());
-			userObject.put("gold", gold.getText().toString().trim());
-			userObject.put("silver", silver.getText().toString().trim());
-			userObject.put("copper", copper.getText().toString().trim());
-			
-			//set ACL in case it is not set yet
-			userObject.setACL(new ParseACL(user));
-			
-			userObject.saveInBackground();
-			Toast.makeText(this, "Item Added", Toast.LENGTH_SHORT).show();
-			this.finish();
-		}	
+		ParseUser user = ParseUser.getCurrentUser();
+		ParseObject userObject = new ParseObject(user.getUsername() + MainMenuActivity.DATA_SUFFIX);
+		
+		userObject.put("name", itemName.getText().toString().trim());
+		userObject.put("rarity", rarity.getSelectedItem().toString());
+		userObject.put("type", itemType.getSelectedItem().toString());
+		userObject.put("gold", gold.getText().toString().trim());
+		userObject.put("silver", silver.getText().toString().trim());
+		userObject.put("copper", copper.getText().toString().trim());
+		
+		//set ACL in case it is not set yet
+		userObject.setACL(new ParseACL(user));
+		
+		userObject.saveInBackground();
+		Toast.makeText(this, "Item Added", Toast.LENGTH_SHORT).show();
+		this.finish();
+	
 	}
 	
 	boolean numberInCorrectRange(int number)
@@ -186,11 +166,7 @@ public class AddItemActivity extends Activity
 		
 		ParseUser user = ParseUser.getCurrentUser();
 		
-		ParseQuery<ParseObject> query;
-		if (isPublic)
-			query = ParseQuery.getQuery("PublicData");
-		else
-			query = ParseQuery.getQuery(user.getUsername() + MainMenuActivity.DATA_SUFFIX);
+		ParseQuery<ParseObject> query = ParseQuery.getQuery(user.getUsername() + MainMenuActivity.DATA_SUFFIX);
 		
 		query.getInBackground(itemID, new GetCallback<ParseObject>() 
 			{

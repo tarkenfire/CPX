@@ -55,7 +55,7 @@ public class ParseArrayAdapter extends ArrayAdapter<ParseObject>
 		builder.append(curItem.getString("rarity"));
 		builder.append(" ");
 		builder.append(curItem.getString("type"));
-		builder.append(" - ");
+		builder.append("] - ");
 		builder.append(curItem.getString("gold"));
 		builder.append("g, ");
 		builder.append(curItem.getString("silver"));

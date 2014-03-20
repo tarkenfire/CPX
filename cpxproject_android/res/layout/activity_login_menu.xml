@@ -15,7 +15,7 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="0dp"
 	    android:text="@string/new_user"
-	    android:layout_weight="45"
+	    android:layout_weight="50"
 	    android:onClick="onClick"
 	     />
 	
@@ -24,17 +24,9 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="0dp"
 	    android:text="@string/old_user"
-	    android:layout_weight="45"
+	    android:layout_weight="50"
 	    android:onClick="onClick"
 	     />
 	
-	<Button 
-	    android:id="@+id/login_anon_user"
-	    android:layout_width="match_parent"
-	    android:layout_height="0dp"
-	    android:text="@string/anon"
-	    android:layout_weight="10"
-	    android:onClick="onClick"
-	     />
 
 </LinearLayout>

@@ -31,10 +31,8 @@ public class MainMenuActivity extends Activity
 	
 	public static final String DATA_SUFFIX = "_data";
 	
-	ListView pubDataList;
 	ListView userDataList;
 	
-	Button publicButton;
 	Button privateButton;
 	
 	//this is crude, but it works.
@@ -53,32 +51,10 @@ public class MainMenuActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		publicButton = (Button) findViewById(R.id.button_add_public);
 		privateButton = (Button) findViewById(R.id.button_add_private);
-		
-		pubDataList = (ListView)findViewById(R.id.main_public_data_list);
 		userDataList = (ListView) findViewById(R.id.main_private_data_list);
-		
-		pubDataList.setLongClickable(true);
 		userDataList.setLongClickable(true);
 		
-		//set listeners
-		pubDataList.setOnItemLongClickListener(new OnItemLongClickListener()
-		{
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int pos, long id)
-			{
-				aMode = MainMenuActivity.this.startActionMode(new ItemActionBarCallback());
-				
-				//brute force tracking system.
-				selectedIndex = pos;
-				
-				currentMode = EditMode.MODE_PUBLIC;
-				
-				return true;
-			}
-		});
 		
 		userDataList.setOnItemLongClickListener(new OnItemLongClickListener()
 		{
@@ -98,54 +74,16 @@ public class MainMenuActivity extends Activity
 
 		Parse.initialize(this, "Mfuibt410lvJAj0eesG0cTdYRRk6LkW9bWoQYvdZ", "NtfbH5hXcVCp1t1GBgK3FxUQpP2rtVLaKsa9FQB2");
 				
-		getPublicData();
 
 		//check if anon flag is set, if so, no user data exists.
 		
-		Intent sender = getIntent();
-		anonFlag = sender.getBooleanExtra("flag_anon", false);
-		
-		if (anonFlag == false)
-		{
-			getUserData();
-			
-			publicButton.setEnabled(true);
-			privateButton.setEnabled(true);
-		}
-		else
-		{
-			//restrict anon users to view only access
-			publicButton.setEnabled(false);
-			privateButton.setEnabled(false);
-		}
 	}
 
 	@Override
 	protected void onResume()
 	{
 		super.onResume();
-		getPublicData();
-		
-		if (anonFlag == false)
-		{
-			getUserData();
-		}
-		
-	}
-	
-	@Override
-	protected void onStop()
-	{
-		super.onStop();
-		Intent sender = getIntent();
-		boolean anonFlag = sender.getBooleanExtra("flag_anon", false);
-		
-		//hack fix to prevent anon users from getting private data.
-		if (anonFlag == true)
-		{
-			ParseUser.logOut();
-		}
-		
+		getUserData();
 	}
 	
 	@Override
@@ -184,36 +122,6 @@ public class MainMenuActivity extends Activity
 		}
 	}
 
-	public void getPublicData()
-	{
-		ParseQuery<ParseObject> pubObj = ParseQuery.getQuery("PublicData");
-		
-		pubObj.findInBackground(new FindCallback<ParseObject>() 
-				{
-				    public void done(List<ParseObject> data, ParseException e) 
-				    {
-				        if (e == null) 
-				        {
-				        	Log.i("data", "Public Data Returned");
-				        	onPublicDataRetuned(data);
-				        }
-				        else 
-				        {
-				            e.printStackTrace();
-				        }
-				    }
-				});	
-	}
-	
-	public void onPublicDataRetuned(List<ParseObject> data)
-	{	
-		
-		if (data.size() == 0) return;
-		
-		ParseArrayAdapter adapter = new ParseArrayAdapter(this, R.layout.list_gw_item, data);
-		
-		pubDataList.setAdapter(adapter);
-	}
 	
 	public void getUserData()
 	{
@@ -252,17 +160,8 @@ public class MainMenuActivity extends Activity
 	
 	protected void deleteItem()
 	{
-		ParseArrayAdapter adapter = null; 
-		
-		switch (currentMode)
-		{
-			case MODE_PRIVATE:
-				adapter = (ParseArrayAdapter) userDataList.getAdapter();
-				break;
-			case MODE_PUBLIC:
-				adapter = (ParseArrayAdapter) pubDataList.getAdapter();
-				break;
-		}
+		ParseArrayAdapter adapter = (ParseArrayAdapter) userDataList.getAdapter();
+				
 		
 		//delete item
 		if (adapter != null)
@@ -272,26 +171,13 @@ public class MainMenuActivity extends Activity
 		}
 		
 		//refresh lists.
-		getPublicData();
-		
-		if (!anonFlag)
-			getUserData();
+		getUserData();
 		
 	}
 	
 	protected void onItemEdit()
 	{
-		ParseArrayAdapter adapter = null; 
-		
-		switch (currentMode)
-		{
-			case MODE_PRIVATE:
-				adapter = (ParseArrayAdapter) userDataList.getAdapter();
-				break;
-			case MODE_PUBLIC:
-				adapter = (ParseArrayAdapter) pubDataList.getAdapter();
-				break;
-		}
+		ParseArrayAdapter adapter = (ParseArrayAdapter) userDataList.getAdapter();
 		
 		//get item id and send intent with two flags.
 		if (adapter != null)
@@ -310,16 +196,6 @@ public class MainMenuActivity extends Activity
 	public void onClick(View v)
 	{
 		Intent sender = new Intent(this, AddItemActivity.class);
-		
-		switch (v.getId())
-		{
-		case R.id.button_add_private:
-			sender.putExtra("flag_is_public", false);
-			break;
-		case R.id.button_add_public:
-			sender.putExtra("flag_is_public", true);
-			break;
-		}
 		
 		startActivity(sender);	
 	}
