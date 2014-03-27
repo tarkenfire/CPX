@@ -2,6 +2,7 @@ package com.hinodesoftworks.cpxproject;
 
 import java.util.List;
 
+import com.hinodesoftworks.cpxproject.utils.NetworkUtils;
 import com.hinodesoftworks.cpxproject.utils.ParseArrayAdapter;
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -73,9 +74,6 @@ public class MainMenuActivity extends Activity
 		});
 
 		Parse.initialize(this, "Mfuibt410lvJAj0eesG0cTdYRRk6LkW9bWoQYvdZ", "NtfbH5hXcVCp1t1GBgK3FxUQpP2rtVLaKsa9FQB2");
-				
-
-		//check if anon flag is set, if so, no user data exists.
 		
 	}
 
@@ -130,6 +128,8 @@ public class MainMenuActivity extends Activity
 		
 		ParseQuery<ParseObject> userObj = ParseQuery.getQuery(username + DATA_SUFFIX);
 		
+		userObj.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
+		
 		userObj.findInBackground(new FindCallback<ParseObject>() 
 				{
 				    public void done(List<ParseObject> data, ParseException e) 
@@ -141,6 +141,7 @@ public class MainMenuActivity extends Activity
 				        }
 				        else 
 				        {
+				        	Toast.makeText(MainMenuActivity.this, "No data could be loaded.",Toast.LENGTH_LONG).show();
 				            e.printStackTrace();
 				        }
 				    }
@@ -165,9 +166,17 @@ public class MainMenuActivity extends Activity
 		
 		//delete item
 		if (adapter != null)
-		{
-			ParseObject itemToDelete = adapter.getItem(selectedIndex);
-			itemToDelete.deleteInBackground();
+		{	
+			if (NetworkUtils.isConnected(this))
+			{
+				ParseObject itemToDelete = adapter.getItem(selectedIndex);
+				itemToDelete.deleteInBackground();
+			}
+			else
+			{
+				ParseObject itemToDelete = adapter.getItem(selectedIndex);
+				itemToDelete.deleteEventually();
+			}
 		}
 		
 		//refresh lists.
@@ -205,13 +214,6 @@ public class MainMenuActivity extends Activity
 		@Override
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item)
 		{
-			if (MainMenuActivity.this.anonFlag == true)
-			{
-				Toast.makeText(MainMenuActivity.this, "Only registered users can edit data.", Toast.LENGTH_SHORT).show();
-				mode.finish();
-				return false;
-			}
-	
 			switch(item.getItemId())
 			{
 				case R.id.action_delete:

@@ -1,5 +1,6 @@
 package com.hinodesoftworks.cpxproject;
 
+import com.hinodesoftworks.cpxproject.utils.NetworkUtils;
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseACL;
@@ -106,7 +107,7 @@ public class AddItemActivity extends Activity
 			ParseUser user = ParseUser.getCurrentUser();
 			
 			ParseQuery<ParseObject> query = ParseQuery.getQuery(user.getUsername() + MainMenuActivity.DATA_SUFFIX);
-
+			query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
 			query.getInBackground(this.getIntent().getStringExtra("editID"), new GetCallback<ParseObject>() 
 					{
 					public void done(ParseObject itemInfo, ParseException e) 
@@ -120,7 +121,7 @@ public class AddItemActivity extends Activity
 							itemInfo.put("silver", silver.getText().toString().trim());
 							itemInfo.put("copper", copper.getText().toString().trim());
 							
-							itemInfo.saveInBackground();
+							saveData(itemInfo);
 							Toast.makeText(AddItemActivity.this, "Item Edited", Toast.LENGTH_SHORT).show();
 							AddItemActivity.this.finish();
 					    }
@@ -147,7 +148,7 @@ public class AddItemActivity extends Activity
 		//set ACL in case it is not set yet
 		userObject.setACL(new ParseACL(user));
 		
-		userObject.saveInBackground();
+		saveData(userObject);
 		Toast.makeText(this, "Item Added", Toast.LENGTH_SHORT).show();
 		this.finish();
 	
@@ -167,7 +168,7 @@ public class AddItemActivity extends Activity
 		ParseUser user = ParseUser.getCurrentUser();
 		
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(user.getUsername() + MainMenuActivity.DATA_SUFFIX);
-		
+		query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
 		query.getInBackground(itemID, new GetCallback<ParseObject>() 
 			{
 			@SuppressWarnings("unchecked")
@@ -198,6 +199,18 @@ public class AddItemActivity extends Activity
 			  }
 			});
 		
+	}
+	
+	protected void saveData(ParseObject objectToSave)
+	{
+		if (NetworkUtils.isConnected(this))
+		{
+			objectToSave.saveInBackground();
+		}
+		else
+		{
+			objectToSave.saveEventually();
+		}
 	}
 
 }
