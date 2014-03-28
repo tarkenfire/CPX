@@ -36,7 +36,10 @@
     
     UIBarButtonItem* logOutItem = [[UIBarButtonItem alloc] initWithTitle:@"Log Out" style:UIBarButtonItemStylePlain target:self action:@selector(logOutPressed)];
     [self.navigationItem setLeftBarButtonItem:logOutItem];
-    
+  }
+
+-(void)viewWillAppear:(BOOL)animated
+{
     PFUser* user = [PFUser currentUser];
     NSString* objectName = [NSString stringWithFormat:@"%@%@", [user username], @"_data"];
     
@@ -55,7 +58,6 @@
             //error
         }
     }];
-    
 }
 
 -(void) logOutPressed
@@ -106,7 +108,12 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    AddItemViewController* vc = [[AddItemViewController alloc] initWithNibName:@"AddItemViewController" bundle:nil];
+    
+    PFObject* objectToEdit = [data objectAtIndex:[indexPath row]];
+    vc.objectId = [objectToEdit objectId];
+    
+    [self.navigationController pushViewController:vc animated:true];
 }
 
 

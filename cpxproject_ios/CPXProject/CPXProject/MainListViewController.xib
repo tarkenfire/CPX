@@ -25,6 +25,9 @@
                         <state key="normal" title="Add New Item">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
+                        <connections>
+                            <action selector="onClick:" destination="-1" eventType="touchUpInside" id="hSh-3b-gf1"/>
+                        </connections>
                     </button>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="Ag4-hU-rUW"/>
