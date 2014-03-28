@@ -2,7 +2,7 @@
 //  AppDelegate.m
 //  CPXProject
 //
-//  Created by マイケル マンキュソ on 3/27/14.
+//  Created by Michael Mancuso on 3/27/14.
 //  Copyright (c) 2014 Hinode Softworks. All rights reserved.
 //
 
@@ -19,6 +19,9 @@
     
     // Override point for customization after application launch.
     UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:mainView];
+    
+    [Parse setApplicationId:@"Mfuibt410lvJAj0eesG0cTdYRRk6LkW9bWoQYvdZ"
+                  clientKey:@"NtfbH5hXcVCp1t1GBgK3FxUQpP2rtVLaKsa9FQB2"];
     
     self.window.rootViewController = navController;
     

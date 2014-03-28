@@ -33,20 +33,24 @@ public class LoginMenuActivity extends Activity
 		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 		boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 		
-		if (!isConnected)
-		{
-			Toast.makeText(this, "No Internet Connection - Please try again later.", Toast.LENGTH_LONG).show();
-			return;
-		}
+
 		
 		//check if user is already logged in
 		if (user != null)
 		{
+
+			
 			Log.i("User", "Not Null");
 			Intent sender;
 			sender = new Intent(this, MainMenuActivity.class);
 			startActivity(sender);
 			
+		}
+		
+		if (user == null && !isConnected)
+		{
+			Toast.makeText(this, "Internet connection required for login.", Toast.LENGTH_LONG).show();
+			return;
 		}
 		//else do nothing
 	}
